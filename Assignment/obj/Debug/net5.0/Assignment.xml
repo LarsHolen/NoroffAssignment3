@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Assignment</name>
+    </assembly>
+    <members>
+        <member name="M:Assignment.Controllers.CharacterController.#ctor(Assignment.Models.AssignmentDbContext,AutoMapper.IMapper)">
+            <summary>
+            Constructor
+            Sets up context and mapper
+            </summary>
+            <param name="context"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.GetCharacters">
+            <summary>
+            Returns a list of all characters
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.GetCharacter(System.Int32)">
+            <summary>
+            Returns a single character with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.PutCharacter(System.Int32,Assignment.Models.DTO.Character.CharacterEditDTO)">
+            <summary>
+            Changes character with id == {id}, to character in params
+            </summary>
+            <param name="id"></param>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.PostCharacter(Assignment.Models.DTO.Character.CharacterCreateDTO)">
+            <summary>
+            Add a new character to db
+            </summary>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.DeleteCharacter(System.Int32)">
+            <summary>
+             Deletes a character from DB with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.CharacterExists(System.Int32)">
+            <summary>
+            Check in _context if the character with id == id exist
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assignment.Controllers.FranchisesController">
+            <summary>
+            Controller for the Franchise
+            </summary>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.#ctor(Assignment.Models.AssignmentDbContext,AutoMapper.IMapper)">
+            <summary>
+            Constructor with context and mapper
+            </summary>
+            <param name="context"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.GetFranchises">
+            <summary>
+            Return a list of FranchiseReadDTO's
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.GetFranchise(System.Int32)">
+            <summary>
+            Return franchise with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.PutFranchise(System.Int32,Assignment.Models.DTO.Franchise.FranchiseReadDTO)">
+            <summary>
+            Update franchise with id == {id}
+            </summary>
+            <param name="id"></param>
+            <param name="franchise"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.PostFranchise(Assignment.Models.DTO.Franchise.FranchiseCreateDTO)">
+            <summary>
+            Add/create a new franchise
+            </summary>
+            <param name="franchise"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.DeleteFranchise(System.Int32)">
+            <summary>
+            Delete franchise with ID == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.UpdateCharactersInMovie(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Add a list (int) of Movie Ids to a franchise id == {id}
+            </summary>
+            <param name="id"></param>
+            <param name="movies"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assignment.Controllers.MovieController">
+            <summary>
+            Controller for the Movies
+            </summary>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.#ctor(Assignment.Models.AssignmentDbContext,AutoMapper.IMapper)">
+            <summary>
+            Constructor with context and mapper
+            </summary>
+            <param name="context"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.GetMovies">
+            <summary>
+            Return all movies
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.GetMovie(System.Int32)">
+            <summary>
+            Return movie with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.PutMovie(System.Int32,Assignment.Models.DTO.Movie.MovieEditDTO)">
+            <summary>
+            Update the movie with id == {id}
+            </summary>
+            <param name="id"></param>
+            <param name="movie"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.PostMovie(Assignment.Models.DTO.Movie.MovieCreateDTO)">
+            <summary>
+            Add/create a new Movie
+            </summary>
+            <param name="movie"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.DeleteMovie(System.Int32)">
+            <summary>
+            Delete Movie with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.UpdateCharactersInMovie(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Adds characters to a movie.  Movie id, List if character IDs
+            </summary>
+            <param name="id"></param>
+            <param name="characters"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

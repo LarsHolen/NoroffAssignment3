@@ -6,30 +6,55 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Assignment.Models;
+using System.Net.Mime;
+using AutoMapper;
+using Assignment.Models.DTO.Movie;
 
 namespace Assignment.Controllers
 {
+    /// <summary>
+    /// Controller for the Movies
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class MovieController : ControllerBase
     {
         private readonly AssignmentDbContext _context;
-
-        public MovieController(AssignmentDbContext context)
+        private readonly IMapper _mapper;
+        
+        /// <summary>
+        /// Constructor with context and mapper
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="mapper"></param>
+        public MovieController(AssignmentDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: api/Movie
+        /// <summary>
+        /// Return all movies
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<MovieReadDTO>>> GetMovies()
         {
-            return await _context.Movies.ToListAsync();
+            return _mapper.Map<List<MovieReadDTO>>(await _context.Movies
+                .Include(c => c.Characters)
+                .ToListAsync());
         }
 
-        // GET: api/Movie/5
+        /// <summary>
+        /// Return movie with id == {id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<MovieReadDTO>> GetMovie(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
 
@@ -37,21 +62,26 @@ namespace Assignment.Controllers
             {
                 return NotFound();
             }
-
-            return movie;
+            await _context.Entry(movie).Collection(i => i.Characters).LoadAsync();
+            return _mapper.Map<MovieReadDTO>(movie);
         }
 
-        // PUT: api/Movie/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754  TODO::::::: MAKE  DTO's 
+        /// <summary>
+        /// Update the movie with id == {id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="movie"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, Movie movie)
+        public async Task<IActionResult> PutMovie(int id, MovieEditDTO movie)
         {
             if (id != movie.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(movie).State = EntityState.Modified;
+            Movie rMovie = _mapper.Map<Movie>(movie);
+            _context.Entry(rMovie).State = EntityState.Modified;
 
             try
             {
@@ -73,19 +103,27 @@ namespace Assignment.Controllers
         }
 
 
-        // POST: api/Movie
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Add/create a new Movie
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<Movie>> PostMovie(MovieCreateDTO movie)
         {
-            _context.Movies.Add(movie);
+            Movie rMovie = _mapper.Map<Movie>(movie);
+            _context.Movies.Add(rMovie);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
+            return CreatedAtAction("GetMovie", new { id = rMovie.Id }, movie);
         }
 
 
-        // DELETE: api/Movie/5
+        /// <summary>
+        /// Delete Movie with id == {id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
@@ -101,7 +139,12 @@ namespace Assignment.Controllers
             return NoContent();
         }
 
-        // Update characters in a movie
+        /// <summary>
+        /// Adds characters to a movie.  Movie id, List if character IDs
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="characters"></param>
+        /// <returns></returns>
         [HttpPut("{id}/characters")]
         public async Task<IActionResult> UpdateCharactersInMovie(int id, List<int> characters)
         {
@@ -109,13 +152,13 @@ namespace Assignment.Controllers
             {
                 return NotFound();
             }
-
+            
             Movie movieToUpdateCharacters = await _context.Movies
                 .Include(c => c.Characters)
                 .Where(c => c.Id == id)
                 .FirstAsync();
-
-            // Loop through certificates, try and assign to coach
+            
+            // Loop through character IDs, try and assign to coach
             // Trying to see if there is a nicer way of doing this, dont like the multiple calls
             List<Character> charas = new();
             foreach (int chaId in characters)

@@ -134,3 +134,5 @@ C:\Users\larsh\source\repos\noroffassignment3\Assignment\bin\Debug\net5.0\runtim
 C:\Users\larsh\source\repos\noroffassignment3\Assignment\bin\Debug\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Users\larsh\source\repos\noroffassignment3\Assignment\bin\Debug\net5.0\AutoMapper.dll
 C:\Users\larsh\source\repos\noroffassignment3\Assignment\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\larsh\source\repos\noroffassignment3\Assignment\bin\Debug\net5.0\Assignment.xml
+C:\Users\larsh\source\repos\noroffassignment3\Assignment\obj\Debug\net5.0\Assignment.xml
