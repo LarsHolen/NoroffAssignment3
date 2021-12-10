@@ -85,6 +85,7 @@ namespace Assignment.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -101,18 +102,24 @@ namespace Assignment.Migrations
                         new
                         {
                             Id = 1,
+                            Description = "No known franchise or missing information",
+                            Name = "No franchise"
+                        },
+                        new
+                        {
+                            Id = 2,
                             Description = "Fast cars and action!",
                             Name = "Fast And Furious"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 3,
                             Description = "Boxing",
                             Name = "Rocky"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 4,
                             Description = "SciFi, alien monsters attack!",
                             Name = "Alien"
                         });
@@ -131,7 +138,9 @@ namespace Assignment.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("FranchiseId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Genre")
                         .HasMaxLength(100)
@@ -144,7 +153,7 @@ namespace Assignment.Migrations
                     b.Property<string>("ReleaseYear")
                         .IsRequired()
                         .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
+                        .HasColumnType("varchar(4)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -166,7 +175,7 @@ namespace Assignment.Migrations
                         {
                             Id = 1,
                             Director = "Rob Cohen",
-                            FranchiseId = 1,
+                            FranchiseId = 2,
                             Genre = "Action, crime, thriller",
                             ImageURL = "https://www.imdb.com/title/tt0232500/mediaviewer/rm3153527296/?ref_=ext_shr_lnk",
                             ReleaseYear = "2001",
@@ -177,7 +186,7 @@ namespace Assignment.Migrations
                         {
                             Id = 2,
                             Director = "Rob Cohen",
-                            FranchiseId = 1,
+                            FranchiseId = 2,
                             Genre = "Action, crime, thriller",
                             ImageURL = "https://www.imdb.com/title/tt0232500/mediaviewer/rm3153527296/?ref_=ext_shr_lnk",
                             ReleaseYear = "2002",
@@ -188,7 +197,7 @@ namespace Assignment.Migrations
                         {
                             Id = 3,
                             Director = "John G. Avildsen",
-                            FranchiseId = 2,
+                            FranchiseId = 3,
                             Genre = "Action, sport, boxing",
                             ImageURL = "https://www.imdb.com/title/tt0075148/mediaviewer/rm960529408/?ref_=ext_shr_lnk",
                             ReleaseYear = "1976",
@@ -199,7 +208,7 @@ namespace Assignment.Migrations
                         {
                             Id = 4,
                             Director = "Sylvester Stallone",
-                            FranchiseId = 2,
+                            FranchiseId = 3,
                             Genre = "Action, sport, boxing",
                             ImageURL = "https://www.imdb.com/title/tt0075148/mediaviewer/rm960529408/?ref_=ext_shr_lnk",
                             ReleaseYear = "1979",
@@ -210,7 +219,7 @@ namespace Assignment.Migrations
                         {
                             Id = 5,
                             Director = "Ridley Scott",
-                            FranchiseId = 3,
+                            FranchiseId = 4,
                             Genre = "Horror, Sci-Fi",
                             ImageURL = "https://www.imdb.com/title/tt0078748/mediaviewer/rm2990766080/?ref_=ext_shr_lnk",
                             ReleaseYear = "1979",
@@ -221,7 +230,7 @@ namespace Assignment.Migrations
                         {
                             Id = 6,
                             Director = "James Cameron",
-                            FranchiseId = 3,
+                            FranchiseId = 4,
                             Genre = "Horror, Sci-Fi",
                             ImageURL = "https://www.imdb.com/title/tt0078748/mediaviewer/rm2990766080/?ref_=ext_shr_lnk",
                             ReleaseYear = "1986",

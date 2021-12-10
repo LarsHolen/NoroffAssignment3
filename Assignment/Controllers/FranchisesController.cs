@@ -64,6 +64,61 @@ namespace Assignment.Controllers
         }
 
         /// <summary>
+        /// Return Franchise by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("{name}/byname")]
+        public async Task<ActionResult<FranchiseReadDTO>> GetFranchiseByName(string name)
+        {
+            Franchise franchise;
+            try
+            {
+                franchise = await _context.Franchises.Where(m => m.Name == name).FirstAsync();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+
+            
+            return _mapper.Map<FranchiseReadDTO>(franchise);
+        }
+
+        /// <summary>
+        /// Gets a selection of franchises.  Offset==how many you would like to skip.  Number==how many you want returned
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        [HttpGet("{offset}/group")]
+        public async Task<ActionResult<IEnumerable<FranchiseReadDTO>>> GetSomeFranchises(int offset, int number)
+        {
+            // return BadRequest if number is too low
+            if (number < 1) return BadRequest("Number < 1");
+
+            List<Franchise> franchises;
+            // getting the requested character records
+            try
+            {
+                franchises = await _context.Franchises
+                .Skip(offset)
+                .Take(number)
+                .ToListAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            if (franchises.Count == 0)
+            {
+                return NotFound("No records found");
+            }
+            // Gets all FranchiseDTO's
+            return _mapper.Map<List<FranchiseReadDTO>>(franchises);
+        }
+
+        /// <summary>
         /// Update franchise with id == {id}
         /// </summary>
         /// <param name="id"></param>
@@ -154,8 +209,6 @@ namespace Assignment.Controllers
                 .Where(c => c.Id == id)
                 .FirstAsync();
 
-            // TODOOOOOO:::::::::::
-            // Trying to see if there is a nicer way of doing this, dont like the multiple calls
             List<Movie> movs = new();
             foreach (int movId in movies)
             {
@@ -177,8 +230,6 @@ namespace Assignment.Controllers
 
             return NoContent();
         }
-
-
 
         private bool FranchiseExists(int id)
         {

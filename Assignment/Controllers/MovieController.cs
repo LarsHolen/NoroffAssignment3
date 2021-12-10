@@ -67,6 +67,62 @@ namespace Assignment.Controllers
         }
 
         /// <summary>
+        /// Return movie by title
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("{name}/byname")]
+        public async Task<ActionResult<MovieReadDTO>> GetMovieByName(string name)
+        {
+            Movie movie;
+            try
+            {
+                movie = await _context.Movies.Where(m => m.Title == name).FirstAsync();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+
+            await _context.Entry(movie).Collection(i => i.Characters).LoadAsync();
+            return _mapper.Map<MovieReadDTO>(movie);
+        }
+
+        /// <summary>
+        /// Gets a selection of movies.  Offset==how many you would like to skip.  Number==how many you want returned
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        [HttpGet("{offset}/group")]
+        public async Task<ActionResult<IEnumerable<MovieReadDTO>>> GetSomeMovies(int offset, int number)
+        {
+            // return BadRequest if number is too low
+            if (number < 1) return BadRequest("Number < 1");
+
+            List<Movie> movies;
+            // getting the requested character records
+            try
+            {
+                movies = await _context.Movies
+                .Skip(offset)
+                .Take(number)
+                .ToListAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            if (movies.Count == 0)
+            {
+                return NotFound("No records found");
+            }
+            // Gets all FranchiseDTO's
+            return _mapper.Map<List<MovieReadDTO>>(movies);
+        }
+
+
+        /// <summary>
         /// Update the movie with id == {id}
         /// </summary>
         /// <param name="id"></param>
@@ -104,7 +160,7 @@ namespace Assignment.Controllers
 
 
         /// <summary>
-        /// Add/create a new Movie
+        /// Add/create a new Movie(default franchise is id=1, unknown or none)
         /// </summary>
         /// <param name="movie"></param>
         /// <returns></returns>
@@ -148,6 +204,7 @@ namespace Assignment.Controllers
         [HttpPut("{id}/characters")]
         public async Task<IActionResult> UpdateCharactersInMovie(int id, List<int> characters)
         {
+            // If the moveie doesnt exist, return NotFound
             if (!MovieExists(id))
             {
                 return NotFound();
@@ -159,7 +216,6 @@ namespace Assignment.Controllers
                 .FirstAsync();
             
             // Loop through character IDs, try and assign to coach
-            // Trying to see if there is a nicer way of doing this, dont like the multiple calls
             List<Character> charas = new();
             foreach (int chaId in characters)
             {

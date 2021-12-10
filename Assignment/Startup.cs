@@ -1,4 +1,5 @@
 using Assignment.Models;
+using Assignment.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,9 +33,14 @@ namespace Assignment
         {
 
             services.AddControllers();
+            // Adding Automapper
             services.AddAutoMapper(typeof(Startup));
+            // Setting up DBcontext, giving it connectionstring from appsettings.json
             services.AddDbContext<AssignmentDbContext>(opt =>
-            opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))); // DefaultConnection or AzureConnection
+            // Adding my IServices(Character, Franchise and Movie)
+            services.AddScoped(typeof(ICharacterService), typeof(CharacterService));
+            // Adding Docs
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { 
@@ -56,6 +62,7 @@ namespace Assignment
 
                 });
                 // Set the comments path for the Swagger JSON and UI. Remeber to edit project file!
+                // no warn for missing docs and  <GenerateDocumentationFile>true..
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -68,9 +75,12 @@ namespace Assignment
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Assignment v1"));
+                
             }
+
+            // Moving these two lines outside the env.IsDevelopment, to get the docs in production
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Assignment v1"));
 
             app.UseHttpsRedirection();
 

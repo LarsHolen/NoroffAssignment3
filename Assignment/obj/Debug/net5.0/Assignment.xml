@@ -25,6 +25,21 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Assignment.Controllers.CharacterController.GetCharacterByName(System.String)">
+            <summary>
+            Return Character by full name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.GetSomeCharacters(System.Int32,System.Int32)">
+            <summary>
+            Gets a selection of characters.  Offset==how many you would like to skip.  Number==how many you want returned
+            </summary>
+            <param name="offset"></param>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
         <member name="M:Assignment.Controllers.CharacterController.PutCharacter(System.Int32,Assignment.Models.DTO.Character.CharacterEditDTO)">
             <summary>
             Changes character with id == {id}, to character in params
@@ -54,6 +69,56 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Assignment.Controllers.CharacterServiceController.GetCharacters">
+            <summary>
+            Get all characters.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterServiceController.GetCharacter(System.Int32)">
+            <summary>
+            Gets a specific character by Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterServiceController.GetCharacterByName(System.String)">
+            <summary>
+            Returns a character by full name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterServiceController.GetSomeCharacters(System.Int32,System.Int32)">
+            <summary>
+            Gets a selection of characters.  Skip offset and select the next number records
+            </summary>
+            <param name="offset"></param>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterServiceController.PutCharacter(System.Int32,Assignment.Models.DTO.Character.CharacterEditDTO)">
+            <summary>
+            Changes character with id == {id}, to character in params
+            </summary>
+            <param name="id"></param>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterServiceController.PostCharacter(Assignment.Models.DTO.Character.CharacterCreateDTO)">
+            <summary>
+            Add a new character to db
+            </summary>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterServiceController.DeleteCharacter(System.Int32)">
+            <summary>
+             Deletes a character from DB with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:Assignment.Controllers.FranchisesController">
             <summary>
             Controller for the Franchise
@@ -77,6 +142,21 @@
             Return franchise with id == {id}
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.GetFranchiseByName(System.String)">
+            <summary>
+            Return Franchise by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.GetSomeFranchises(System.Int32,System.Int32)">
+            <summary>
+            Gets a selection of franchises.  Offset==how many you would like to skip.  Number==how many you want returned
+            </summary>
+            <param name="offset"></param>
+            <param name="number"></param>
             <returns></returns>
         </member>
         <member name="M:Assignment.Controllers.FranchisesController.PutFranchise(System.Int32,Assignment.Models.DTO.Franchise.FranchiseReadDTO)">
@@ -134,6 +214,21 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Assignment.Controllers.MovieController.GetMovieByName(System.String)">
+            <summary>
+            Return movie by title
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.GetSomeMovies(System.Int32,System.Int32)">
+            <summary>
+            Gets a selection of movies.  Offset==how many you would like to skip.  Number==how many you want returned
+            </summary>
+            <param name="offset"></param>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
         <member name="M:Assignment.Controllers.MovieController.PutMovie(System.Int32,Assignment.Models.DTO.Movie.MovieEditDTO)">
             <summary>
             Update the movie with id == {id}
@@ -144,7 +239,7 @@
         </member>
         <member name="M:Assignment.Controllers.MovieController.PostMovie(Assignment.Models.DTO.Movie.MovieCreateDTO)">
             <summary>
-            Add/create a new Movie
+            Add/create a new Movie(default franchise is id=1, unknown or none)
             </summary>
             <param name="movie"></param>
             <returns></returns>

@@ -14,7 +14,7 @@ namespace Assignment.Models.DTO.Movie
         public string Director { get; set; }
         public string ImageURL { get; set; }
         public string TrailerURL { get; set; }
-        public int FranchiseId { get; set; }
+        public int? FranchiseId { get; set; }
 
     }
 }

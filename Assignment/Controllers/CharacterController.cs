@@ -42,6 +42,7 @@ namespace Assignment.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetCharacters()
         {
+            // Gets all CharacterDTO's
             return _mapper.Map<List<CharacterReadDTO>>(await _context.Characters
                 .Include(c=>c.Movies)
                 .ToListAsync());
@@ -55,18 +56,76 @@ namespace Assignment.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CharacterReadDTO>> GetCharacter(int id)
         {
+            // finds character with id
             var character = await _context
                 .Characters.FindAsync(id);
 
-            
+            // return NotFound if character remain null
             if (character == null)
             {
                 return NotFound();
             }
+            // Load the characters movies(not saved in the character table)
             await _context.Entry(character).Collection(i => i.Movies).LoadAsync();
 
-
+            // Map the chatacter to the DTO and return it
             return _mapper.Map<CharacterReadDTO>(character);
+        }
+
+        /// <summary>
+        /// Return Character by full name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("{name}/byname")]
+        public async Task<ActionResult<CharacterReadDTO>> GetCharacterByName(string name)
+        {
+            Character character;
+            try
+            {
+                character = await _context.Characters.Where(m => m.FullName == name).FirstAsync();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+
+            await _context.Entry(character).Collection(i => i.Movies).LoadAsync();
+            return _mapper.Map<CharacterReadDTO>(character);
+        }
+
+        /// <summary>
+        /// Gets a selection of characters.  Offset==how many you would like to skip.  Number==how many you want returned
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        [HttpGet("{offset}/group")]
+        public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetSomeCharacters(int offset, int number)
+        {
+            // return BadRequest if number is too low
+            if (number < 1) return BadRequest("Number < 1");
+  
+            List<Character> characters;
+            // getting the requested character records
+            try
+            {
+                characters = await _context.Characters
+                .Skip(offset)
+                .Take(number)                               
+                .Include(c => c.Movies)
+                .ToListAsync();
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            if(characters.Count == 0)
+            {
+                return NotFound("No records found");
+            }
+           
+            // Gets all CharacterDTO's
+            return _mapper.Map<List<CharacterReadDTO>>(characters);
         }
 
         /// <summary>
@@ -78,15 +137,19 @@ namespace Assignment.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCharacter(int id, CharacterEditDTO character)
         {
+            // Check if the correct ID is in
             if (id != character.Id)
             {
                 return BadRequest();
             }
 
+            // Create a Character object from the DTO
             Character rChar = _mapper.Map<Character>(character);
 
+            // Set the midified state, so EF update it when savechanges is called
             _context.Entry(rChar).State = EntityState.Modified;
 
+            // catching errors
             try
             {
                 await _context.SaveChangesAsync();
@@ -102,7 +165,6 @@ namespace Assignment.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
@@ -115,8 +177,13 @@ namespace Assignment.Controllers
         [HttpPost]
         public async Task<ActionResult<Character>> PostCharacter(CharacterCreateDTO character)
         {
+            if (character.FullName == "string") return BadRequest("Please add a name");
+
+            // Mapping character DTO to a Character object
             Character characterToAdd = _mapper.Map<Character>(character);
+            // Adding the character object
             _context.Characters.Add(characterToAdd);
+            // Save changes
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCharacter", 
@@ -132,12 +199,14 @@ namespace Assignment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCharacter(int id)
         {
+            // Check if character with id exist
             var character = await _context.Characters.FindAsync(id);
             if (character == null)
             {
                 return NotFound();
             }
 
+            // Remove character and save changes
             _context.Characters.Remove(character);
             await _context.SaveChangesAsync();
 

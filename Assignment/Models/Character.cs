@@ -17,12 +17,16 @@ namespace Assignment.Models
         [Required]
         [MaxLength(50)]
         public string FullName { get; set; }
+
         [MaxLength(50)]
         public string Alias { get; set; }
+
         [MaxLength(25)]
         public string Gender { get; set; }
+
         [MaxLength(250)]
         public string ImageURL { get; set; }
+
         // Relationships
         public ICollection<Movie> Movies { get; set; }
 
