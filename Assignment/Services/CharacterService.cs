@@ -60,14 +60,12 @@ namespace Assignment.Services
 
         public async Task<IEnumerable<Character>> GetSomeCharacters(int offset, int number)
         {
-            // Get a list of characters
-            List<Character> characters;
-            characters = await _context.Characters
+            // Return a list of characters
+            return await _context.Characters
                 .Skip(offset)
                 .Take(number)
                 .Include(c => c.Movies)
                 .ToListAsync();
-            return characters;
         }
 
         public async Task<Character> PostCharacter(Character character)

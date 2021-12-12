@@ -1,10 +1,12 @@
 ﻿using Assignment.Models;
-using Assignment.Models.DTO.Character;
+using Assignment.Models.DTO.Franchise;
 using Assignment.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -15,91 +17,91 @@ namespace Assignment.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    public class CharacterServiceController : ControllerBase
+    public class FranchiseServiceController : ControllerBase
     {
         // Add automapper DI
         private readonly IMapper _mapper;
         // Controllers still are responsible for mapping, services/repositories work with domain objects
-        private readonly ICharacterService _characterService;
+        private readonly IFranchiseService _franchiseService;
 
         // Constructor
-        public CharacterServiceController(IMapper mapper, ICharacterService characterService)
+        public FranchiseServiceController(IMapper mapper, IFranchiseService franchiseService)
         {
             _mapper = mapper;
-            _characterService = characterService;
+            _franchiseService = franchiseService;
         }
 
         /// <summary>
-        /// Get all characters.
+        /// Get all franchises.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetCharacters()
+        public async Task<ActionResult<IEnumerable<FranchiseReadDTO>>> GetCharacters()
         {
             // Call service 
-            return _mapper.Map<List<CharacterReadDTO>>(await _characterService.GetCharacters());
+            return _mapper.Map<List<FranchiseReadDTO>>(await _franchiseService.GetFranchises());
         }
 
         /// <summary>
-        /// Gets a specific character by Id
+        /// Gets a specific franchise by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<CharacterReadDTO>> GetCharacter(int id)
+        public async Task<ActionResult<FranchiseReadDTO>> GetFranchise(int id)
         {
             // Call service
-            Character character = await _characterService.GetCharacter(id);
+            Franchise franchise = await _franchiseService.GetFranchise(id);
             // If null, return 404
-            if (character == null)
+            if (franchise == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<CharacterReadDTO>(character);
+            return _mapper.Map<FranchiseReadDTO>(franchise);
         }
 
         /// <summary>
-        /// Returns a character by full name
+        /// Returns a franchise by name
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet("{name}/byname")]
-        public async Task<ActionResult<CharacterReadDTO>> GetCharacterByName(string name)
+        public async Task<ActionResult<FranchiseReadDTO>> GetFranchiseByName(string name)
         {
-            Character character;
+            Franchise franchise;
             try
             {
                 // call service
-                character = await _characterService.GetCharacterByName(name);
+                franchise = await _franchiseService.GetFranchiseByName(name);
             }
             catch (Exception e)
             {
                 // on exception, return 404 with exception message
                 return NotFound(e.Message);
             }
-            return _mapper.Map<CharacterReadDTO>(character);
+            return _mapper.Map<FranchiseReadDTO>(franchise);
         }
 
         /// <summary>
-        /// Gets a selection of characters.  Skip offset and select the next number records
+        /// Gets a selection of franchises.  Skip offset and select the next number records
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="number"></param>
         /// <returns></returns>
         [HttpGet("{offset}/group")]
-        public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetSomeCharacters(int offset, int number)
+        public async Task<ActionResult<IEnumerable<FranchiseReadDTO>>> GetSomeFranchises(int offset, int number)
         {
             // return BadRequest if offset or number is too low
             if (offset < 0) return BadRequest("Offset < 0");
             if (number < 1) return BadRequest("Number < 1");
 
-            List<Character> characters;
-            // getting the requested character records
+            List<Franchise> franchises;
+            // getting the requested franchise records
             try
             {
                 // Call service
-                characters = (List<Character>)await _characterService.GetSomeCharacters(offset, number);
+                franchises = (List<Franchise>)await _franchiseService.GetSomeFranchises(offset, number);
             }
             catch (Exception e)
             {
@@ -107,43 +109,43 @@ namespace Assignment.Controllers
                 return BadRequest(e.Message);
             }
             // If the list is empty, return 404 NotFound
-            if (characters.Count == 0)
+            if (franchises.Count == 0)
             {
                 return NotFound("No records found");
             }
 
             // Return CharacterDTO's
-            return _mapper.Map<List<CharacterReadDTO>>(characters);
+            return _mapper.Map<List<FranchiseReadDTO>>(franchises);
         }
 
         /// <summary>
-        /// Changes character with id == {id}, to character in params
+        /// Changes franchise with id == {id}, to franchise in params
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="character"></param>
+        /// <param name="franchise"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCharacter(int id, CharacterEditDTO character)
+        public async Task<IActionResult> PutFranchise(int id, FranchiseReadDTO franchise)
         {
             // Check if the correct ID is in
-            if (id != character.Id)
+            if (id != franchise.Id)
             {
                 return BadRequest("id must be the same as character.id");
             }
 
-            // Create a Character object from the DTO
-            Character rChar = _mapper.Map<Character>(character);
+            // Create a Franchise object from the DTO
+            Franchise rFran = _mapper.Map<Franchise>(franchise);
 
             // catching errors
             try
             {
                 // Calling service
-                await _characterService.PutCharacter(id, rChar);
+                await _franchiseService.PutFranchise(id, rFran);
             }
             catch (Exception e)
             {
                 // Testing if the id can be found, and if not return 404
-                if (!_characterService.CharacterExists(id))
+                if (!_franchiseService.FranchiseExists(id))
                 {
                     return NotFound();
                 }
@@ -158,42 +160,42 @@ namespace Assignment.Controllers
         }
 
         /// <summary>
-        /// Add a new character to db
+        /// Add a new franchise to db
         /// </summary>
-        /// <param name="character"></param>
+        /// <param name="franchise"></param>
         /// <returns></returns>
 
         [HttpPost]
-        public async Task<ActionResult<Character>> PostCharacter(CharacterCreateDTO character)
+        public async Task<ActionResult<Character>> PostCharacter(FranchiseCreateDTO franchise)
         {
             // Making sure the character to be created atleast have a name.  "string" is default in swagger
-            if (character.FullName == "string" || character.FullName == string.Empty)
+            if (franchise.Name == "string" || franchise.Name == string.Empty)
             {
                 return BadRequest("Please add a name");
             }
-            // Mapping character DTO to a Character object
-            Character characterToAdd = _mapper.Map<Character>(character);
-            
-            // Calling service
-            await _characterService.PostCharacter(characterToAdd);
+            // Mapping FranchiseDTO to a Franchise object
+            Franchise franchiseToAdd = _mapper.Map<Franchise>(franchise);
 
-            return CreatedAtAction("GetCharacter",
-                new { id = characterToAdd.Id },
-                _mapper.Map<CharacterReadDTO>(characterToAdd));
+            // Calling service
+            await _franchiseService.PostFranchise(franchiseToAdd);
+
+            return CreatedAtAction("GetFranchise",
+                new { id = franchiseToAdd.Id },
+                _mapper.Map<FranchiseReadDTO>(franchiseToAdd));
         }
 
         /// <summary>
-        ///  Deletes a character from DB with id == {id}
+        ///  Deletes a franchise from DB with id == {id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCharacter(int id)
+        public async Task<IActionResult> DeleteFranchise(int id)
         {
             try
             {
                 // Calling service
-                await _characterService.DeleteCharacter(id);
+                await _franchiseService.DeleteFranchise(id);
             }
             catch (Exception e)
             {
@@ -203,10 +205,36 @@ namespace Assignment.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Takes an franchise ID, and add the franchise to a list of movies
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="movies"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> UpdateMoviesInFranchise(int id, List<int> movies)
+        {
+            // Abort if ID is 0 or less, and if list is empty
+            if (id <= 0 || movies.Count == 0)
+            {
+                return BadRequest("Invalid id or empty list");
+            }
+
+            // try to call service
+            try
+            {
+                await _franchiseService.UpdateMoviesInFranchise(id, movies);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return NoContent();
+        }
+
         public bool CharacterExists(int id)
         {
             // Call service
-            return _characterService.CharacterExists(id);
+            return _franchiseService.FranchiseExists(id);
         }
 
     }

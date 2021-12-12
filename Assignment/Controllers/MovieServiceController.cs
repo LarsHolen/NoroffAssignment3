@@ -1,5 +1,5 @@
 ﻿using Assignment.Models;
-using Assignment.Models.DTO.Character;
+using Assignment.Models.DTO.Movie;
 using Assignment.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -15,91 +15,91 @@ namespace Assignment.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    public class CharacterServiceController : ControllerBase
+    public class MovieServiceController : ControllerBase
     {
         // Add automapper DI
         private readonly IMapper _mapper;
         // Controllers still are responsible for mapping, services/repositories work with domain objects
-        private readonly ICharacterService _characterService;
+        private readonly IMovieService _movieService;
 
         // Constructor
-        public CharacterServiceController(IMapper mapper, ICharacterService characterService)
+        public MovieServiceController(IMapper mapper, IMovieService movieService)
         {
             _mapper = mapper;
-            _characterService = characterService;
+            _movieService = movieService;
         }
 
         /// <summary>
-        /// Get all characters.
+        /// Get all movies.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetCharacters()
+        public async Task<ActionResult<IEnumerable<MovieReadDTO>>> GetMovies()
         {
             // Call service 
-            return _mapper.Map<List<CharacterReadDTO>>(await _characterService.GetCharacters());
+            return _mapper.Map<List<MovieReadDTO>>(await _movieService.GetMovies());
         }
 
         /// <summary>
-        /// Gets a specific character by Id
+        /// Gets a specific movie by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<CharacterReadDTO>> GetCharacter(int id)
+        public async Task<ActionResult<MovieReadDTO>> GetMovie(int id)
         {
             // Call service
-            Character character = await _characterService.GetCharacter(id);
+            Movie movie = await _movieService.GetMovie(id);
             // If null, return 404
-            if (character == null)
+            if (movie == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<CharacterReadDTO>(character);
+            return _mapper.Map<MovieReadDTO>(movie);
         }
 
         /// <summary>
-        /// Returns a character by full name
+        /// Returns a movie by title
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="title"></param>
         /// <returns></returns>
-        [HttpGet("{name}/byname")]
-        public async Task<ActionResult<CharacterReadDTO>> GetCharacterByName(string name)
+        [HttpGet("{title}/bytitle")]
+        public async Task<ActionResult<MovieReadDTO>> GetMovieByName(string title)
         {
-            Character character;
+            Movie movie;
             try
             {
                 // call service
-                character = await _characterService.GetCharacterByName(name);
+                movie = await _movieService.GetMovieByName(title);
             }
             catch (Exception e)
             {
                 // on exception, return 404 with exception message
                 return NotFound(e.Message);
             }
-            return _mapper.Map<CharacterReadDTO>(character);
+            return _mapper.Map<MovieReadDTO>(movie);
         }
 
         /// <summary>
-        /// Gets a selection of characters.  Skip offset and select the next number records
+        /// Gets a selection of movies.  Skip offset and select the next number records
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="number"></param>
         /// <returns></returns>
         [HttpGet("{offset}/group")]
-        public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetSomeCharacters(int offset, int number)
+        public async Task<ActionResult<IEnumerable<MovieReadDTO>>> GetSomeMovies(int offset, int number)
         {
             // return BadRequest if offset or number is too low
             if (offset < 0) return BadRequest("Offset < 0");
             if (number < 1) return BadRequest("Number < 1");
 
-            List<Character> characters;
+            List<Movie> movies;
             // getting the requested character records
             try
             {
                 // Call service
-                characters = (List<Character>)await _characterService.GetSomeCharacters(offset, number);
+                movies = (List<Movie>)await _movieService.GetSomeMovies(offset, number);
             }
             catch (Exception e)
             {
@@ -107,43 +107,43 @@ namespace Assignment.Controllers
                 return BadRequest(e.Message);
             }
             // If the list is empty, return 404 NotFound
-            if (characters.Count == 0)
+            if (movies.Count == 0)
             {
                 return NotFound("No records found");
             }
 
             // Return CharacterDTO's
-            return _mapper.Map<List<CharacterReadDTO>>(characters);
+            return _mapper.Map<List<MovieReadDTO>>(movies);
         }
 
         /// <summary>
-        /// Changes character with id == {id}, to character in params
+        /// Changes movie with id == {id}, to movie in params
         /// </summary>
         /// <param name="id"></param>
         /// <param name="character"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCharacter(int id, CharacterEditDTO character)
+        public async Task<IActionResult> PutMovie(int id, MovieEditDTO movie)
         {
             // Check if the correct ID is in
-            if (id != character.Id)
+            if (id != movie.Id)
             {
-                return BadRequest("id must be the same as character.id");
+                return BadRequest("id must be the same as movie.id");
             }
 
             // Create a Character object from the DTO
-            Character rChar = _mapper.Map<Character>(character);
+            Movie rMovie = _mapper.Map<Movie>(movie);
 
             // catching errors
             try
             {
                 // Calling service
-                await _characterService.PutCharacter(id, rChar);
+                await _movieService.PutMovie(id, rMovie);
             }
             catch (Exception e)
             {
                 // Testing if the id can be found, and if not return 404
-                if (!_characterService.CharacterExists(id))
+                if (!_movieService.MovieExists(id))
                 {
                     return NotFound();
                 }
@@ -158,42 +158,42 @@ namespace Assignment.Controllers
         }
 
         /// <summary>
-        /// Add a new character to db
+        /// Add a new movie to db
         /// </summary>
         /// <param name="character"></param>
         /// <returns></returns>
 
         [HttpPost]
-        public async Task<ActionResult<Character>> PostCharacter(CharacterCreateDTO character)
+        public async Task<ActionResult<Character>> PostMovie(MovieCreateDTO movie)
         {
-            // Making sure the character to be created atleast have a name.  "string" is default in swagger
-            if (character.FullName == "string" || character.FullName == string.Empty)
+            // Making sure the movie to be created atleast have a title.  "string" is default in swagger
+            if (movie.Title == "string" || movie.Title == string.Empty)
             {
-                return BadRequest("Please add a name");
+                return BadRequest("Please add a Title");
             }
-            // Mapping character DTO to a Character object
-            Character characterToAdd = _mapper.Map<Character>(character);
-            
-            // Calling service
-            await _characterService.PostCharacter(characterToAdd);
+            // Mapping movie DTO to a Movie object
+            Movie movieToAdd = _mapper.Map<Movie>(movie);
 
-            return CreatedAtAction("GetCharacter",
-                new { id = characterToAdd.Id },
-                _mapper.Map<CharacterReadDTO>(characterToAdd));
+            // Calling service
+            await _movieService.PostMovie(movieToAdd);
+
+            return CreatedAtAction("GetMovie",
+                new { id = movieToAdd.Id },
+                _mapper.Map<MovieReadDTO>(movieToAdd));
         }
 
         /// <summary>
-        ///  Deletes a character from DB with id == {id}
+        ///  Deletes a movie from DB with id == {id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCharacter(int id)
+        public async Task<IActionResult> DeleteMovie(int id)
         {
             try
             {
                 // Calling service
-                await _characterService.DeleteCharacter(id);
+                await _movieService.DeleteMovie(id);
             }
             catch (Exception e)
             {
@@ -203,10 +203,38 @@ namespace Assignment.Controllers
             return NoContent();
         }
 
-        public bool CharacterExists(int id)
+        /// <summary>
+        /// Update characters in a movie(delete old list).  Movie id, List if character IDs
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="characters"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/characters")]
+        public async Task<IActionResult> UpdateCharactersInMovie(int id, List<int> characters)
+        {
+            // If the moveie doesnt exist, return NotFound
+            if (!MovieExists(id))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _movieService.UpdateCharactersInMovie(id, characters);
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+            return NoContent();
+        }
+
+
+        public bool MovieExists(int id)
         {
             // Call service
-            return _characterService.CharacterExists(id);
+            return _movieService.MovieExists(id);
         }
 
     }

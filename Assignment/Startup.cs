@@ -40,6 +40,8 @@ namespace Assignment
             opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))); // DefaultConnection or AzureConnection
             // Adding my IServices(Character, Franchise and Movie)
             services.AddScoped(typeof(ICharacterService), typeof(CharacterService));
+            services.AddScoped(typeof(IFranchiseService), typeof(FranchiseService));
+            services.AddScoped(typeof(IMovieService), typeof(MovieService));
             // Adding Docs
             services.AddSwaggerGen(c =>
             {

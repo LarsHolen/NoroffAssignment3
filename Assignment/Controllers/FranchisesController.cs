@@ -197,27 +197,33 @@ namespace Assignment.Controllers
         /// <param name="movies"></param>
         /// <returns></returns>
         [HttpPut("{id}/movies")]
-        public async Task<IActionResult> UpdateCharactersInMovie(int id, List<int> movies)
+        public async Task<IActionResult> UpdateMoviesInFranchise(int id, List<int> movies)
         {
             if (!FranchiseExists(id))
             {
                 return NotFound();
             }
 
+            // Load the franchise with a collection of current movies
             Franchise franchiseToUpdateMovies = await _context.Franchises
                 .Include(c => c.Movies)
                 .Where(c => c.Id == id)
                 .FirstAsync();
 
-            List<Movie> movs = new();
+            // Loop through the list of movies
             foreach (int movId in movies)
             {
+                // Try to find the movie
                 Movie mov = await _context.Movies.FindAsync(movId);
                 if (mov == null)
                     return BadRequest("Movie does not exist!");
-                movs.Add(mov);
+                // If the franchise does not contain the movie, add it
+                if(!franchiseToUpdateMovies.Movies.Contains(mov))
+                {
+                    franchiseToUpdateMovies.Movies.Add(mov);
+                }
             }
-            franchiseToUpdateMovies.Movies = movs;
+            
 
             try
             {

@@ -67,6 +67,25 @@ namespace Assignment.Controllers
         }
 
         /// <summary>
+        /// Return movies with franchiseId == {id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/byFranchise")]
+        public async Task<ActionResult<IEnumerable<MovieReadDTO>>> GetMoviesByFranchise(int id)
+        {
+            var movie = await _context.Movies.Where(m => m.FranchiseId == id)
+                .Include(c => c.Characters)
+                .ToListAsync();
+
+            if (movie.Count == 0)
+            {
+                return NotFound();
+            }
+            return _mapper.Map<List<MovieReadDTO>>(movie);
+        }
+
+        /// <summary>
         /// Return movie by title
         /// </summary>
         /// <param name="name"></param>
@@ -196,7 +215,7 @@ namespace Assignment.Controllers
         }
 
         /// <summary>
-        /// Adds characters to a movie.  Movie id, List if character IDs
+        /// Update characters in a movie(delete old list).  Movie id, List if character IDs
         /// </summary>
         /// <param name="id"></param>
         /// <param name="characters"></param>
@@ -214,25 +233,24 @@ namespace Assignment.Controllers
                 .Include(c => c.Characters)
                 .Where(c => c.Id == id)
                 .FirstAsync();
-            
-            // Loop through character IDs, try and assign to coach
-            List<Character> charas = new();
+
             foreach (int chaId in characters)
             {
                 Character chara = await _context.Characters.FindAsync(chaId);
-                if (chara == null)
-                    return BadRequest("Character does not exist!");
-                charas.Add(chara);
+                // Cant find a character with that ID, so we continue to next.
+                if (chara == null) continue;
+                // If character is in the list, we continue to next.  No need for doubles
+                if (movieToUpdateCharacters.Characters.Contains(chara)) continue;
+                movieToUpdateCharacters.Characters.Add(chara);
             }
-            movieToUpdateCharacters.Characters = charas;
-
+           
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException e)
             {
-                throw;
+                return BadRequest(e.Message);
             }
 
             return NoContent();

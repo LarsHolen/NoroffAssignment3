@@ -181,9 +181,67 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Assignment.Controllers.FranchisesController.UpdateCharactersInMovie(System.Int32,System.Collections.Generic.List{System.Int32})">
+        <member name="M:Assignment.Controllers.FranchisesController.UpdateMoviesInFranchise(System.Int32,System.Collections.Generic.List{System.Int32})">
             <summary>
             Add a list (int) of Movie Ids to a franchise id == {id}
+            </summary>
+            <param name="id"></param>
+            <param name="movies"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.GetCharacters">
+            <summary>
+            Get all franchises.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.GetFranchise(System.Int32)">
+            <summary>
+            Gets a specific franchise by Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.GetFranchiseByName(System.String)">
+            <summary>
+            Returns a franchise by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.GetSomeFranchises(System.Int32,System.Int32)">
+            <summary>
+            Gets a selection of franchises.  Skip offset and select the next number records
+            </summary>
+            <param name="offset"></param>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.PutFranchise(System.Int32,Assignment.Models.DTO.Franchise.FranchiseReadDTO)">
+            <summary>
+            Changes franchise with id == {id}, to franchise in params
+            </summary>
+            <param name="id"></param>
+            <param name="franchise"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.PostCharacter(Assignment.Models.DTO.Franchise.FranchiseCreateDTO)">
+            <summary>
+            Add a new franchise to db
+            </summary>
+            <param name="franchise"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.DeleteFranchise(System.Int32)">
+            <summary>
+             Deletes a franchise from DB with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchiseServiceController.UpdateMoviesInFranchise(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Takes an franchise ID, and add the franchise to a list of movies
             </summary>
             <param name="id"></param>
             <param name="movies"></param>
@@ -210,6 +268,13 @@
         <member name="M:Assignment.Controllers.MovieController.GetMovie(System.Int32)">
             <summary>
             Return movie with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.GetMoviesByFranchise(System.Int32)">
+            <summary>
+            Return movies with franchiseId == {id}
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -253,7 +318,65 @@
         </member>
         <member name="M:Assignment.Controllers.MovieController.UpdateCharactersInMovie(System.Int32,System.Collections.Generic.List{System.Int32})">
             <summary>
-            Adds characters to a movie.  Movie id, List if character IDs
+            Update characters in a movie(delete old list).  Movie id, List if character IDs
+            </summary>
+            <param name="id"></param>
+            <param name="characters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.GetMovies">
+            <summary>
+            Get all movies.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.GetMovie(System.Int32)">
+            <summary>
+            Gets a specific movie by Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.GetMovieByName(System.String)">
+            <summary>
+            Returns a movie by title
+            </summary>
+            <param name="title"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.GetSomeMovies(System.Int32,System.Int32)">
+            <summary>
+            Gets a selection of movies.  Skip offset and select the next number records
+            </summary>
+            <param name="offset"></param>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.PutMovie(System.Int32,Assignment.Models.DTO.Movie.MovieEditDTO)">
+            <summary>
+            Changes movie with id == {id}, to movie in params
+            </summary>
+            <param name="id"></param>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.PostMovie(Assignment.Models.DTO.Movie.MovieCreateDTO)">
+            <summary>
+            Add a new movie to db
+            </summary>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.DeleteMovie(System.Int32)">
+            <summary>
+             Deletes a movie from DB with id == {id}
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieServiceController.UpdateCharactersInMovie(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Update characters in a movie(delete old list).  Movie id, List if character IDs
             </summary>
             <param name="id"></param>
             <param name="characters"></param>
