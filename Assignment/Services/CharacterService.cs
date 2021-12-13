@@ -21,6 +21,10 @@ namespace Assignment.Services
             // Test is Any Characters in the set had Id
             return _context.Characters.Any(e => e.Id == id);
         }
+        public bool NameExistInDB(Character character)
+        {
+            return _context.Characters.Any(e => e.FullName == character.FullName);
+        }
 
         public async Task DeleteCharacter(int id)
         {
@@ -70,11 +74,16 @@ namespace Assignment.Services
 
         public async Task<Character> PostCharacter(Character character)
         {
-            // Save a new character
-            _context.Characters.Add(character);
-            await _context.SaveChangesAsync();
-
-            return character;
+            // Save a new character if name does not exist in db
+            if (!NameExistInDB(character))
+            {
+                _context.Characters.Add(character);
+                await _context.SaveChangesAsync();
+                return character;
+            } else
+            {
+                return null;
+            }  
         }
 
         public async Task PutCharacter(int id, Character character)

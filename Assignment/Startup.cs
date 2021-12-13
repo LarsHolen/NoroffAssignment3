@@ -37,7 +37,7 @@ namespace Assignment
             services.AddAutoMapper(typeof(Startup));
             // Setting up DBcontext, giving it connectionstring from appsettings.json
             services.AddDbContext<AssignmentDbContext>(opt =>
-            opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))); // DefaultConnection or AzureConnection
+            opt.UseSqlServer(Configuration.GetConnectionString("AzureConnection"))); // DefaultConnection or AzureConnection
             // Adding my IServices(Character, Franchise and Movie)
             services.AddScoped(typeof(ICharacterService), typeof(CharacterService));
             services.AddScoped(typeof(IFranchiseService), typeof(FranchiseService));

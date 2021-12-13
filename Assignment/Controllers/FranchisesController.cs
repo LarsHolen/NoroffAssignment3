@@ -163,6 +163,12 @@ namespace Assignment.Controllers
         [HttpPost]
         public async Task<ActionResult<Franchise>> PostFranchise(FranchiseCreateDTO franchise)
         {
+            // Make sure a name is added
+            if (franchise.Name == "string") return BadRequest("Please add a name");
+
+            // Test for duplicate name
+            if (NameExistInDB(franchise)) return BadRequest("Name exist in DB");
+
             Franchise franchiseToAdd = _mapper.Map<Franchise>(franchise);
             _context.Franchises.Add(franchiseToAdd);
             await _context.SaveChangesAsync();
@@ -237,9 +243,25 @@ namespace Assignment.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Test if any record has id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>bool</returns>
         private bool FranchiseExists(int id)
         {
             return _context.Franchises.Any(e => e.Id == id);
+        }
+
+
+        /// <summary>
+        /// Tests if Name exist in db 
+        /// </summary>
+        /// <param name="character"></param>
+        /// <returns>bool</returns>
+        private bool NameExistInDB(FranchiseCreateDTO franchise)
+        {
+            return _context.Franchises.Any(e => e.Name == franchise.Name);
         }
     }
 }

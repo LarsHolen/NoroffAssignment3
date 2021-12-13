@@ -63,12 +63,24 @@ namespace Assignment.Services
             return _context.Movies.Any(e => e.Id == id);
         }
 
+        public bool NameExistInDB(Movie movie)
+        {
+            return _context.Movies.Any(e => e.Title == movie.Title);
+        }
+
         public async Task<Movie> PostMovie(Movie movie)
         {
-
-            _context.Movies.Add(movie);
-            await _context.SaveChangesAsync();
-            return movie;
+            // Save movie if Title does not exist in db
+            if (!NameExistInDB(movie))
+            {
+                _context.Movies.Add(movie);
+                await _context.SaveChangesAsync();
+                return movie;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task PutMovie(int id, Movie movie)

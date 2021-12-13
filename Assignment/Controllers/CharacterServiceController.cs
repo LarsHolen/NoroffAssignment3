@@ -177,6 +177,8 @@ namespace Assignment.Controllers
             // Calling service
             await _characterService.PostCharacter(characterToAdd);
 
+            if (characterToAdd.Id == 0) return BadRequest("Duplicate name!");
+
             return CreatedAtAction("GetCharacter",
                 new { id = characterToAdd.Id },
                 _mapper.Map<CharacterReadDTO>(characterToAdd));

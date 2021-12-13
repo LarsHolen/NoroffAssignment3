@@ -177,6 +177,8 @@ namespace Assignment.Controllers
             // Calling service
             await _movieService.PostMovie(movieToAdd);
 
+            if (movieToAdd.Id == 0) return BadRequest("Duplicate title!");
+
             return CreatedAtAction("GetMovie",
                 new { id = movieToAdd.Id },
                 _mapper.Map<MovieReadDTO>(movieToAdd));

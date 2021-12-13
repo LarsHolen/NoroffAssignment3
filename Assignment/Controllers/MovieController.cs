@@ -186,6 +186,12 @@ namespace Assignment.Controllers
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(MovieCreateDTO movie)
         {
+            // Make sure a title is added
+            if (movie.Title == "string") return BadRequest("Please add a title");
+
+            // Test for duplicate name
+            if (NameExistInDB(movie)) return BadRequest("Title exist in DB");
+
             Movie rMovie = _mapper.Map<Movie>(movie);
             _context.Movies.Add(rMovie);
             await _context.SaveChangesAsync();
@@ -259,10 +265,25 @@ namespace Assignment.Controllers
 
 
 
-
+        /// <summary>
+        /// Returns bool if any record has Id == id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool MovieExists(int id)
         {
             return _context.Movies.Any(e => e.Id == id);
         }
+
+        /// <summary>
+        /// Tests if Title exist in db 
+        /// </summary>
+        /// <param name="character"></param>
+        /// <returns>bool</returns>
+        private bool NameExistInDB(MovieCreateDTO movie)
+        {
+            return _context.Movies.Any(e => e.Title == movie.Title);
+        }
+
     }
 }

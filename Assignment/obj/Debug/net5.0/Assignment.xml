@@ -67,7 +67,14 @@
             Check in _context if the character with id == id exist
             </summary>
             <param name="id"></param>
-            <returns></returns>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Assignment.Controllers.CharacterController.NameExistInDB(Assignment.Models.DTO.Character.CharacterCreateDTO)">
+            <summary>
+            Tests if Name exist in db 
+            </summary>
+            <param name="character"></param>
+            <returns>bool</returns>
         </member>
         <member name="M:Assignment.Controllers.CharacterServiceController.GetCharacters">
             <summary>
@@ -188,6 +195,20 @@
             <param name="id"></param>
             <param name="movies"></param>
             <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.FranchiseExists(System.Int32)">
+            <summary>
+            Test if any record has id
+            </summary>
+            <param name="id"></param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Assignment.Controllers.FranchisesController.NameExistInDB(Assignment.Models.DTO.Franchise.FranchiseCreateDTO)">
+            <summary>
+            Tests if Name exist in db 
+            </summary>
+            <param name="character"></param>
+            <returns>bool</returns>
         </member>
         <member name="M:Assignment.Controllers.FranchiseServiceController.GetCharacters">
             <summary>
@@ -323,6 +344,20 @@
             <param name="id"></param>
             <param name="characters"></param>
             <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.MovieExists(System.Int32)">
+            <summary>
+            Returns bool if any record has Id == id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assignment.Controllers.MovieController.NameExistInDB(Assignment.Models.DTO.Movie.MovieCreateDTO)">
+            <summary>
+            Tests if Title exist in db 
+            </summary>
+            <param name="character"></param>
+            <returns>bool</returns>
         </member>
         <member name="M:Assignment.Controllers.MovieServiceController.GetMovies">
             <summary>

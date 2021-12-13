@@ -29,6 +29,10 @@ namespace Assignment.Services
             // return true if ID is found in set
             return _context.Franchises.Any(e => e.Id == id);
         }
+        public bool NameExistInDB(Franchise franchise)
+        {
+            return _context.Franchises.Any(e => e.Name == franchise.Name);
+        }
 
         public async Task<Franchise> GetFranchise(int id)
         {
@@ -58,10 +62,17 @@ namespace Assignment.Services
 
         public async Task<Franchise> PostFranchise(Franchise franchise)
         {
-            _context.Franchises.Add(franchise);
-            await _context.SaveChangesAsync();
-
-            return franchise;
+            // Save new franchise if name does not exist in db
+            if (!NameExistInDB(franchise))
+            {
+                _context.Franchises.Add(franchise);
+                await _context.SaveChangesAsync();
+                return franchise;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task PutFranchise(int id, Franchise franchise)

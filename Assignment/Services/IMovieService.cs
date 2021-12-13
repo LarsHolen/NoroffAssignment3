@@ -17,6 +17,7 @@ namespace Assignment.Services
         public Task DeleteMovie(int id);
         public Task UpdateCharactersInMovie(int id, List<int> movies);
         public bool MovieExists(int id);
+        public bool NameExistInDB(Movie movie);
 
     }
 }

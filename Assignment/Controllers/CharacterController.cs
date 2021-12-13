@@ -177,7 +177,11 @@ namespace Assignment.Controllers
         [HttpPost]
         public async Task<ActionResult<Character>> PostCharacter(CharacterCreateDTO character)
         {
+            // Make sure a name is added
             if (character.FullName == "string") return BadRequest("Please add a name");
+
+            // Test for duplicate name
+            if (NameExistInDB(character)) return BadRequest("Name exist in DB");
 
             // Mapping character DTO to a Character object
             Character characterToAdd = _mapper.Map<Character>(character);
@@ -186,7 +190,7 @@ namespace Assignment.Controllers
             // Save changes
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCharacter", 
+            return CreatedAtAction("GetCharacter",
                 new { id = characterToAdd.Id },
                 _mapper.Map<CharacterReadDTO>(characterToAdd));
         }
@@ -217,10 +221,20 @@ namespace Assignment.Controllers
         /// Check in _context if the character with id == id exist
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>bool</returns>
         private bool CharacterExists(int id)
         {
             return _context.Characters.Any(e => e.Id == id);
+        }
+
+        /// <summary>
+        /// Tests if Name exist in db 
+        /// </summary>
+        /// <param name="character"></param>
+        /// <returns>bool</returns>
+        private bool NameExistInDB(CharacterCreateDTO character)
+        {
+            return _context.Characters.Any(e => e.FullName == character.FullName);
         }
     }
 }

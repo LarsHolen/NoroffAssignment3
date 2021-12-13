@@ -15,5 +15,6 @@ namespace Assignment.Services
         public Task<Character> PostCharacter(Character character);
         public Task DeleteCharacter(int id);
         public bool CharacterExists(int id);
+        public bool NameExistInDB(Character character);
     }
 }

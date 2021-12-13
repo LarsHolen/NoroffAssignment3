@@ -179,6 +179,8 @@ namespace Assignment.Controllers
             // Calling service
             await _franchiseService.PostFranchise(franchiseToAdd);
 
+            if (franchiseToAdd.Id == 0) return BadRequest("Duplicate name!");
+
             return CreatedAtAction("GetFranchise",
                 new { id = franchiseToAdd.Id },
                 _mapper.Map<FranchiseReadDTO>(franchiseToAdd));
