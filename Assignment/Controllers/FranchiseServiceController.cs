@@ -194,6 +194,7 @@ namespace Assignment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFranchise(int id)
         {
+            if (id == 1) return BadRequest("Can not remove the default/no franchise at ID 1");
             try
             {
                 // Calling service

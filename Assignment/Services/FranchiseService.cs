@@ -18,6 +18,14 @@ namespace Assignment.Services
 
         public async Task DeleteFranchise(int id)
         {
+            // Remove this franchise from all movies with it in, setting franchise ID to 1(which is "No known franchise or missing information")
+            foreach (Movie movie in _context.Movies)
+            {
+                if (movie.FranchiseId == id)
+                {
+                    movie.FranchiseId = 1;
+                }
+            }
             // Find and remove franchise
             var franchise = await _context.Franchises.FindAsync(id);
             _context.Franchises.Remove(franchise);
