@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WilHnhqRmObEPRbNnZ4ez3aRGUX4UovDztkB2VnicY9lafmAxouKWik+L51MIMsO9XGvnsOVU0Z17+unh33z0Q==",
+  "dgSpecHash": "f7nzfFqqb/8U4oHf8mrdTXW+r4p5oyyas8lVYakyvGMYBetPMJDsPzVZJyCIMftmRHCpt45CjjYGKnbi5wSvIg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\larsh\\source\\repos\\noroffassignment3\\Assignment\\Assignment.csproj",
+  "projectFilePath": "C:\\Users\\larsh\\Source\\Repos\\noroffassignment3\\Assignment\\Assignment.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\larsh\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\larsh\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",

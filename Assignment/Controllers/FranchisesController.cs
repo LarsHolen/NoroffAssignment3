@@ -184,10 +184,20 @@ namespace Assignment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFranchise(int id)
         {
+            if (id == 1) return BadRequest("Can not remove the default/no franchise at ID 1"); 
             var franchise = await _context.Franchises.FindAsync(id);
             if (franchise == null)
             {
                 return NotFound();
+            }
+
+            // Remove this franchise from all movies with it in, setting franchise ID to 1(which is "No known franchise or missing information")
+           foreach(Movie movie in _context.Movies)
+            {
+                if(movie.FranchiseId == id)
+                {
+                    movie.FranchiseId = 1;
+                }
             }
 
             _context.Franchises.Remove(franchise);
