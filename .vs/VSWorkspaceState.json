@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Assignment"
+    "\\Assignment",
+    "\\Assignment\\Controllers",
+    "\\Assignment\\Services"
   ],
-  "SelectedNode": "\\Assignment\\Startup.cs",
+  "SelectedNode": "\\Assignment\\Services\\FranchiseService.cs",
   "PreviewInSolutionExplorer": false
 }

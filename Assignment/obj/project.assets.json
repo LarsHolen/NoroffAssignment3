@@ -7406,11 +7406,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\larsh\\source\\repos\\noroffassignment3\\Assignment\\Assignment.csproj",
+      "projectUniqueName": "C:\\Users\\larsh\\Source\\Repos\\noroffassignment3\\Assignment\\Assignment.csproj",
       "projectName": "Assignment",
-      "projectPath": "C:\\Users\\larsh\\source\\repos\\noroffassignment3\\Assignment\\Assignment.csproj",
+      "projectPath": "C:\\Users\\larsh\\Source\\Repos\\noroffassignment3\\Assignment\\Assignment.csproj",
       "packagesPath": "C:\\Users\\larsh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\larsh\\source\\repos\\noroffassignment3\\Assignment\\obj\\",
+      "outputPath": "C:\\Users\\larsh\\Source\\Repos\\noroffassignment3\\Assignment\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -7492,7 +7492,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }
