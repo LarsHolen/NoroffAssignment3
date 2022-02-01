@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\Assignment",
+    "\\Assignment\\Controllers",
     "\\Assignment\\Models"
   ],
-  "SelectedNode": "\\Assignment\\Startup.cs",
+  "SelectedNode": "\\Assignment\\Controllers\\FranchisesController.cs",
   "PreviewInSolutionExplorer": false
 }
