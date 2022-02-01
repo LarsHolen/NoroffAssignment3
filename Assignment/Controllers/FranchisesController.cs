@@ -207,7 +207,7 @@ namespace Assignment.Controllers
         }
 
         /// <summary>
-        /// Add a list (int) of Movie Ids to a franchise id == {id}
+        /// Add a list (int) of Movie Ids to  a franchise id == {id}
         /// </summary>
         /// <param name="id"></param>
         /// <param name="movies"></param>

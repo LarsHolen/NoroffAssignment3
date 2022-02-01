@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\Assignment",
-    "\\Assignment\\Controllers",
-    "\\Assignment\\Services"
+    "\\Assignment\\Models"
   ],
-  "SelectedNode": "\\Assignment\\Services\\FranchiseService.cs",
+  "SelectedNode": "\\Assignment\\Startup.cs",
   "PreviewInSolutionExplorer": false
 }
